@@ -62,3 +62,50 @@ void estructuraDinamica::ordenarSeleccio() {
         }
     }
 }
+
+
+//------------------------------------------------------------------------------------------------------------------
+void estructuraDinamica::ordenarSeleccio() {
+    node* iniciNoOrdenada = inici;
+    node* nouInici = nullptr;
+    node* nouFinal = nullptr;
+
+    while (iniciNoOrdenada != nullptr) {
+        // --- Buscar el nodo mínimo
+        node* anterior = nullptr;
+        node* actual   = iniciNoOrdenada;
+
+        node* anteriorMinim = nullptr;   // anterior del mínimo encontrado
+        node* minim         = iniciNoOrdenada; // suponer que el primero es el minimo y vamos avanzando
+
+        while (actual != nullptr) {
+            if (actual->dada < minim->dada) {
+                minim = actual;
+                anteriorMinim = anterior;
+            }
+            anterior = actual;
+            actual = actual->seg;
+        }
+
+        // --- Sacar el minimo de la lista
+        if (anteriorMinim == nullptr) {
+            iniciNoOrdenada = minim->seg;
+        } else {
+            anteriorMinim->seg = minim->seg;
+        }
+
+        // --- Añadir el minimo al final de la lista ordenada
+        minim->seg = nullptr; // pasa a ser el último de la parte ordenada
+
+        if (nouInici == nullptr) {
+            // primera inserción: ordenada estaba vacía
+            nouInici = minim;
+            nouFinal = minim;
+        } else {
+            nouFinal->seg = minim;
+            nouFinal = minim;
+        }
+    }
+
+    inici = nouInici;
+}
